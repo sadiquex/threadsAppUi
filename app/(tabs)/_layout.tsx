@@ -1,3 +1,4 @@
+import { Entypo, FontAwesome } from '@expo/vector-icons';
 import { Link, Tabs } from 'expo-router';
 
 import { HeaderButton } from '../../components/HeaderButton';
@@ -8,12 +9,14 @@ export default function TabLayout() {
     <Tabs
       screenOptions={{
         tabBarActiveTintColor: 'black',
+        tabBarShowLabel: false,
       }}>
       <Tabs.Screen
         name="index"
         options={{
-          title: 'Tab One',
-          tabBarIcon: ({ color }) => <TabBarIcon name="code" color={color} />,
+          title: 'Home',
+          tabBarIcon: ({ color, size }) => <Entypo name="home" color={color} size={size} />,
+          headerShown: false,
           headerRight: () => (
             <Link href="/modal" asChild>
               <HeaderButton />
@@ -22,10 +25,50 @@ export default function TabLayout() {
         }}
       />
       <Tabs.Screen
-        name="two"
+        name="search"
         options={{
-          title: 'Tab Two',
-          tabBarIcon: ({ color }) => <TabBarIcon name="code" color={color} />,
+          title: 'Search',
+          tabBarIcon: ({ color, size }) => (
+            <Entypo name="magnifying-glass" color={color} size={size} />
+          ),
+        }}
+      />
+
+      <Tabs.Screen
+        name="create"
+        options={{
+          title: 'Create',
+          tabBarShowLabel: false,
+          tabBarIcon: ({ color, size }) => <Entypo name="plus" color={color} size={size} />,
+          headerShown: false,
+          tabBarIconStyle: {
+            backgroundColor: '#f1f5f9',
+            borderRadius: 8,
+            width: 48,
+            // marginTop: 4,
+          },
+        }}
+      />
+
+      <Tabs.Screen
+        name="notifications"
+        options={{
+          title: 'Notifications',
+          tabBarIcon: ({ color, size }) => (
+            <Entypo name="heart-outlined" color={color} size={size} />
+          ),
+          tabBarShowLabel: false,
+          headerShown: false,
+        }}
+      />
+
+      <Tabs.Screen
+        name="profile"
+        options={{
+          title: 'Profile',
+          tabBarIcon: ({ color, size }) => <FontAwesome name="user" color={color} size={size} />,
+          tabBarShowLabel: false,
+          headerShown: false,
         }}
       />
     </Tabs>

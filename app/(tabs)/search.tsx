@@ -3,7 +3,7 @@ import { StyleSheet, View } from 'react-native';
 
 import { ScreenContent } from '~/components/ScreenContent';
 
-export default function Home() {
+export default function Search() {
   return (
     <>
       <Stack.Screen options={{ title: 'Tab Two' }} />
