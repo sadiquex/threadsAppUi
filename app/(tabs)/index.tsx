@@ -1,16 +1,35 @@
 import { Stack } from 'expo-router';
-import { StyleSheet, View } from 'react-native';
+import { FlatList, StyleSheet, Text, View } from 'react-native';
+import { SafeAreaView } from 'react-native-safe-area-context';
 
-import { ScreenContent } from '~/components/ScreenContent';
+import Header from '~/components/home/header';
+import { DATA } from '~/core/constants/data';
 
 export default function Home() {
   return (
-    <>
+    <SafeAreaView style={styles.container}>
       <Stack.Screen options={{ title: 'Tab One' }} />
-      <View style={styles.container}>
-        <ScreenContent path="app/(tabs)/index.tsx" title="Tab One" />
-      </View>
-    </>
+      <Header />
+
+      <FlatList
+        data={DATA as unknown as ThreadCardProps[]}
+        renderItem={({ item }) => (
+          <View
+            style={{
+              backgroundColor: '#fff',
+              padding: 20,
+              marginVertical: 8,
+              marginHorizontal: 16,
+            }}>
+            <Text>{item.content}</Text>
+          </View>
+        )}
+        ListHeaderComponent={Header}
+        ItemSeparatorComponent={() => <View className="h-0.5 bg-gray-200" />}
+        keyExtractor={(item) => item.id}
+        // showsVerticalScrollIndicator={false}
+      />
+    </SafeAreaView>
   );
 }
 
