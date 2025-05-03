@@ -1,34 +1,85 @@
+import { Ionicons } from '@expo/vector-icons';
+import BottomSheet, {
+  BottomSheetBackdrop,
+  BottomSheetBackdropProps,
+  BottomSheetView,
+} from '@gorhom/bottom-sheet';
 import { Stack } from 'expo-router';
+import { useRef } from 'react';
 import { FlatList, StyleSheet, Text, View } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 
+import Card from '~/components/home/card';
 import Header from '~/components/home/header';
 import { DATA } from '~/core/constants/data';
+import { COLORS } from '~/core/theme/colors';
+
+// how much our bottom sheet should be expanded
+const snapPoints = ['60%'];
 
 export default function Home() {
+  const bottomSheetRef = useRef<BottomSheet>(null);
+
+  const renderBackdrop = (props: BottomSheetBackdropProps) => {
+    return <BottomSheetBackdrop {...props} disappearsOnIndex={-1} appearsOnIndex={0} />;
+  };
+
   return (
     <SafeAreaView style={styles.container}>
       <Stack.Screen options={{ title: 'Tab One' }} />
-      <Header />
 
       <FlatList
         data={DATA as unknown as ThreadCardProps[]}
-        renderItem={({ item }) => (
-          <View
-            style={{
-              backgroundColor: '#fff',
-              padding: 20,
-              marginVertical: 8,
-              marginHorizontal: 16,
-            }}>
-            <Text>{item.content}</Text>
-          </View>
-        )}
+        renderItem={({ item }) => <Card item={item} bottomSheetRef={bottomSheetRef} />}
         ListHeaderComponent={Header}
         ItemSeparatorComponent={() => <View className="h-0.5 bg-gray-200" />}
         keyExtractor={(item) => item.id}
         // showsVerticalScrollIndicator={false}
       />
+
+      <BottomSheet
+        snapPoints={snapPoints}
+        index={-1}
+        ref={bottomSheetRef}
+        backdropComponent={renderBackdrop}
+        enablePanDownToClose
+        handleStyle={{
+          backgroundColor: COLORS.grey[100],
+          borderTopEndRadius: 24,
+          borderTopStartRadius: 24,
+        }}>
+        <BottomSheetView style={{ flex: 1 }}>
+          <View className="flex-1 bg-[#f5f5f5] p-4">
+            <View className="flex rounded-2xl bg-white">
+              <View className="my-4 flex flex-row items-center justify-between px-4 py-2">
+                <Text className="font-semibold">Save</Text>
+                <Ionicons name="bookmark-outline" size={16} color={COLORS.textGray} />
+              </View>
+              <View className="h-[0.5] w-full bg-gray-200" />
+              <View className="my-4 flex flex-row items-center justify-between px-4 py-2">
+                <Text className="font-semibold">Not interested</Text>
+                <Ionicons name="eye-off-outline" size={16} color={COLORS.textGray} />
+              </View>
+            </View>
+            <View className="mt-4 rounded-2xl bg-white p-4">
+              <View className="my-2 flex flex-row items-center justify-between py-2">
+                <Text className="font-semibold">Mute</Text>
+                <Ionicons name="mic-off" size={16} color={COLORS.textGray} />
+              </View>
+              <View className="h-[0.5] w-full bg-gray-200" />
+              <View className="my-2 flex flex-row items-center justify-between py-2">
+                <Text className="font-semibold">Not interested</Text>
+                <Ionicons name="eye-off-sharp" size={16} color={COLORS.textGray} />
+              </View>
+              <View className="h-[0.5] w-full bg-gray-200" />
+              <View className="my-2 flex flex-row items-center justify-between py-2">
+                <Text className="font-semibold text-red-500">Report</Text>
+                <Ionicons name="eye-off-outline" size={16} color={COLORS.red[500]} />
+              </View>
+            </View>
+          </View>
+        </BottomSheetView>
+      </BottomSheet>
     </SafeAreaView>
   );
 }
